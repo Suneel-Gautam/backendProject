@@ -21,9 +21,11 @@ const fileUpload = async (localFilePath) => {
 
     } catch (error) {
         unlinkSync(localFilePath)
-        //file deleted Sucessfully
+        //file deleted Sucessfully`
         return null
 
 
     }
 }
+
+export { fileUpload }
