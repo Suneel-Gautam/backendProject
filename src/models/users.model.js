@@ -47,7 +47,6 @@ const userSchema = new mongoose.Schema({
         timestamps: true
     }
 )
-
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next()
     this.password = await bcrypt.hash(this.password, 10)
@@ -63,7 +62,7 @@ userSchema.methods.createAccessToken = function () {
         {
             expiresIn: process.env.ACCESS_TOKEN_EXPIRY
         }
-    ) 
+    )
 }
 userSchema.methods.createRefreshToken = function () {
     return jwt.sign({
@@ -77,7 +76,5 @@ userSchema.methods.createRefreshToken = function () {
         }
     )
 }
-
-
 const User = mongoose.model('User', userSchema)
 export default User
