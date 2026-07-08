@@ -7,11 +7,9 @@ configDotenv();
 dns.setServers(['8.8.8.8']);
 const PORT = process.env.PORT
 
-
-
 connectDB().then(() => {
     app.listen(PORT, () => {
-        `Backend is running on port ${PORT}`
+        console.log(`Backend is running on port ${PORT}`)
     })
 })
 

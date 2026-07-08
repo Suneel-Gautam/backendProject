@@ -23,8 +23,6 @@ const fileUpload = async (localFilePath) => {
         unlinkSync(localFilePath)
         //file deleted Sucessfully`
         return null
-
-
     }
 }
 
