@@ -21,7 +21,6 @@ const generateAccessAndRefreshToken = async (userid) => {
         throw new ApiError(500, "Internal Server Error")
     }
 }
-
 const register = asyncHandler(async (req, res) => {
     // get user details from frontend ( request body)
     const { username, email, fullName, password } = req.body
@@ -155,4 +154,8 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 })
 
-export { register }
+export {
+    register,
+    loginUser,
+    logoutUser
+}
