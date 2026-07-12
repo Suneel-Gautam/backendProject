@@ -307,6 +307,43 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         )
     )
 })
+const updateUserCoverImage = asyncHandler(async (req, res) => {
+    const coverImageLocalPath = req.file?.path
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "CoverImage is missing!!")
+    }
+    const coverImage = await fileUpload(coverImageLocalPath)
+    if (!coverImage) {
+        throw new ApiError(
+            400,
+            "Failed to upload on cloudinary"
+        )
+    }
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                coverImage
+            }
+        },
+        {
+            new: true
+        }).select('-password -refreshToken')
+
+    if (!user) {
+        throw new ApiError(
+            404,
+            "User not Found"
+        )
+    }
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            { user },
+            "coverImage Updated Sucessfully!!"
+        )
+    )
+})
 
 export {
     register,
@@ -316,5 +353,6 @@ export {
     changeCurrentPassword,
     getCurrentUser,
     updateAccountDetails,
-    updateUserAvatar
+    updateUserAvatar,
+    updateUserCoverImage
 }
