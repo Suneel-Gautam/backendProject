@@ -192,10 +192,96 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         )
 
 })
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+
+    const { oldPassword, newPassword } = req.body
+
+
+    const user = await User.findById(req.user._id)
+    if (!oldPassword || !newPassword) {
+        throw new ApiError(400, "Please provide both oldpassword and newpassword")
+    }
+
+    if (!user) {
+        throw new ApiError(404, "User Not found!!")
+    }
+
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
+    if (!isPasswordCorrect) {
+        throw new ApiError(401, "Old Password is incorrect, Try Again!!")
+    }
+
+    user.password = newPassword;
+    await user.save({ validateBeforeSave: false })
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {},
+            "New password Updated Successfully"
+        )
+    )
+
+})
+const getCurrentUser = asyncHandler(async (req, res) => {
+
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            req.user,
+            "User Fetched SuccessFully"
+        )
+    )
+
+})
+const updateAccountDetails = asyncHandler(async (req, res) => {
+    const { fullname, email } = req.body
+
+    if (!fullname || !email) {
+        throw new ApiError(400, "fullname and email can't be empty")
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                fullname,
+                email
+
+            }
+
+        },
+        {
+            new: true
+        }
+    ).select('-password -refreshToken')
+
+    if (!user) {
+        throw new ApiError(404, "User not Found")
+    }
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {
+                user
+            },
+            "User Data updated Sucessfully"
+        )
+    )
+})
+const updateUserAvatar = asyncHandler(async (req, res) => {
+
+    
+
+})
 
 export {
     register,
     loginUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    changeCurrentPassword,
+    getCurrentUser,
+    updateAccountDetails
 }
