@@ -4,6 +4,7 @@ import User from '../models/users.model.js'
 import { fileUpload } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from 'jsonwebtoken'
+import mongoose, { Mongoose } from "mongoose";
 
 const generateAccessAndRefreshToken = async (userid) => {
     try {
@@ -249,7 +250,6 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
                 email
 
             }
-
         },
         {
             new: true
@@ -341,6 +341,142 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
             200,
             { user },
             "coverImage Updated Sucessfully!!"
+        )
+    )
+})
+const getUserChannelProfile = asyncHandler(async (req, res) => {
+    const { username } = req.params
+
+    if (!username) {
+        throw new ApiError(
+            400,
+            "Username is missing"
+        )
+    }
+
+    const channel = await User.aggregate([
+        {
+            $match: {
+                username: username?.trim()
+            }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "channel",
+                as: "subscribers"
+            }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "subscriber",
+                as: "subscriberTo"
+            }
+        },
+        {
+            $addFields: {
+                subscriberCount: {
+                    $size: "$subscribers"
+                },
+                subscribedToCount: {
+                    $size: "$subscriberTo"
+                },
+                isSubscribed: {
+                    $cond: {
+                        if: { $in: [new mongoose.Types.ObjectId(req.user._id), "$subscribers.subscriber"] },
+                        then: true,
+                        else: false
+                    }
+                }
+            }
+        },
+        {
+            $project: {
+                fullName: 1,
+                username: 1,
+                email: 1,
+                subscriberCount: 1,
+                subscribedToCount: 1,
+                isSubscribed: 1,
+                avatar: 1,
+                coverImage: 1
+            }
+        }
+    ])
+
+    if (!channel?.length) {
+        throw new ApiError(
+            401,
+            "Cant Find the User Channel Details"
+        )
+    }
+
+    return res.status(201).json(
+        new ApiResponse(
+            200,
+            channel[0],
+            "User Channel Profile Fetched SucessFully"
+        )
+    )
+
+})
+const getWatchHistory = asyncHandler(async (req, res) => {
+
+    const user = await User.aggregate([
+        {
+            $match: {
+                _id : new Mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $lookup: {
+                from: "videos",
+                localField: "watchHistory",
+                foreignField: "_id",
+                as: "watchHistory",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "owner",
+                            foreignField: "_id",
+                            as: "owner",
+                            pipeline: [{
+                                $project: {
+                                    fullName: 1,
+                                    coverImage: 1,
+                                    username: 1
+                                }
+                            }]
+                        }
+                    },
+                    {
+                        $addFields: {
+                            owner: {
+                                $first: "$owner"
+                            }
+
+                        }
+
+                    }]
+            }
+        }
+
+    ])
+    if (!user.length) {
+        throw new ApiError(
+            404,
+            "user not found"
+        )
+    }
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            user[0].watchHistory,
+            "Watch History Fetched Sucessfully "
         )
     )
 })
