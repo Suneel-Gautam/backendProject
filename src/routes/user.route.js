@@ -1,8 +1,19 @@
 import { Router } from "express";
-import { register, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage } from "../controllers/user.controller.js";
+import {
+    register,
+    loginUser,
+    logoutUser,
+    refreshAccessToken,
+    changeCurrentPassword,
+    getCurrentUser,
+    updateAccountDetails,
+    updateUserAvatar,
+    updateUserCoverImage,
+    getUserChannelProfile,
+    getWatchHistory
+} from "../controllers/user.controller.js";
 import { upload } from '../middlewares/multer.js'
 import { jwtVerify } from "../middlewares/auth.middleware.js";
-
 
 const router = Router()
 
@@ -25,7 +36,7 @@ router.route('/logout').post(
     logoutUser
 )
 router.route('/refresh-token').post(refreshAccessToken)
-router.route('/change-password').put(
+router.route('/change-password').patch(
     jwtVerify,
     changeCurrentPassword
 )
@@ -33,19 +44,27 @@ router.route('/getme').get(
     jwtVerify,
     getCurrentUser
 )
-router.route('/edit-user').put(
+router.route('/edit-user').patch(
     jwtVerify,
     updateAccountDetails
 )
-router.route('/update-avatar').put(
+router.route('/update-avatar').patch(
     jwtVerify,
     upload.single('avatar'),
     updateUserAvatar
 )
-router.route('/update-coverImage').put(
+router.route('/update-coverImage').patch(
     jwtVerify,
     upload.single('coverImage'),
     updateUserCoverImage
+)
+router.route('/channel/:username').get(
+    jwtVerify,
+    getUserChannelProfile
+)
+router.route('/watch-history').get(
+    jwtVerify,
+    getWatchHistory
 )
 
 export default router
