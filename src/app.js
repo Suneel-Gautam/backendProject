@@ -1,5 +1,6 @@
 import express from 'express'
 import cookieParser from 'cookie-parser';
+import videoRouter from './routes/video.route.js';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(cookieParser())
 import userRouter from './routes/user.route.js'
 
 app.use('/api/v1/auth', userRouter)
+app.use('/api/v1/video', videoRouter)
 
 
 

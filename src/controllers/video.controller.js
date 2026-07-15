@@ -210,8 +210,10 @@ const getVideoDetail = asyncHandler(async (req, res) => {
 
 })
 
-
-
-
-
-export { addVideo }
+export {
+    addVideo,
+    updateVideo,
+    deleteVideo,
+    getAllVideo,
+    getVideoDetail
+}
