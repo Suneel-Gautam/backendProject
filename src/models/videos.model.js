@@ -20,11 +20,9 @@ const vidoeSchema = new Schema({
     },
     description: {
         type: String,
-        required: true
     },
     duration: {
         type: Number,
-        required: true,
         default: 0
     },
     views: {
