@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addVideo, updateVideo, deleteVideo, getAllVideo, getVideoDetail } from "../controllers/video.controller.js";
+import { addVideo, updateVideo, deleteVideo, getAllVideo, getVideoDetail, getMyVideo } from "../controllers/video.controller.js";
 import { jwtVerify } from "../middlewares/auth.middleware.js";
 
 
@@ -19,6 +19,10 @@ router.route('/delete/:id').delete(
 )
 router.route('/').get(
     getAllVideo
+)
+router.route('/myVideo').get(
+    jwtVerify,
+    getMyVideo
 )
 router.route('/details/:id').get(
     getVideoDetail

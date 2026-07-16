@@ -95,8 +95,72 @@ const deleteTweet = asyncHandler(async (req, res) => {
 }
 )
 
+const getAllTweet = asyncHandler(async (req, res) => {
+    const tweet = await Tweet.find()
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            tweet,
+            "Tweet Fetched Successfully"
+        )
+    )
+})
+
+const getMyTweet = asyncHandler(async (req, res) => {
+    const ownerId = req.user._id
+
+    if (!ownerId) {
+        throw new ApiError(
+            404,
+            "User Id not Found"
+        )
+    }
+
+    const tweet = await Tweet.find({
+        owner: ownerId
+    })
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            tweet,
+            "My Tweet fetched Sucessfully"
+        )
+    )
+}
+)
+
+const mytweetDetails = asyncHandler(async (req, res) => {
+
+    const id = req.params.id
+
+    const tweet = await Tweet.findById(
+        id
+    )
+
+    if (!tweet) {
+        throw new ApiError(
+            404,
+            "Tweet not found"
+        )
+    }
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            tweet,
+            "Tweet details fetched sucessfully "
+        )
+    )
+}
+)
+
 export {
     addTweet,
     editTweet,
-    deleteTweet
+    deleteTweet,
+    getMyTweet,
+    mytweetDetails,
+    getAllTweet
 }
