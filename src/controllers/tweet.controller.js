@@ -41,7 +41,6 @@ const addTweet = asyncHandler(async (req, res) => {
     )
 }
 )
-
 const editTweet = asyncHandler(async (req, res) => {
     const id = req.params.id
 
@@ -70,7 +69,6 @@ const editTweet = asyncHandler(async (req, res) => {
         )
     )
 })
-
 const deleteTweet = asyncHandler(async (req, res) => {
     const id = req.params.id
 
@@ -94,7 +92,6 @@ const deleteTweet = asyncHandler(async (req, res) => {
     )
 }
 )
-
 const getAllTweet = asyncHandler(async (req, res) => {
     const tweet = await Tweet.find()
 
@@ -106,7 +103,6 @@ const getAllTweet = asyncHandler(async (req, res) => {
         )
     )
 })
-
 const getMyTweet = asyncHandler(async (req, res) => {
     const ownerId = req.user._id
 
@@ -130,7 +126,6 @@ const getMyTweet = asyncHandler(async (req, res) => {
     )
 }
 )
-
 const mytweetDetails = asyncHandler(async (req, res) => {
 
     const id = req.params.id
@@ -155,7 +150,6 @@ const mytweetDetails = asyncHandler(async (req, res) => {
     )
 }
 )
-
 export {
     addTweet,
     editTweet,

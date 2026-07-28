@@ -4,7 +4,6 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { fileUpload } from "../utils/cloudinary.js";
 import Video from "../models/videos.model.js";
-import User from "../models/users.model.js";
 
 const addVideo = asyncHandler(async (req, res) => {
     const { title, description, duration, isPublished } = req.body
@@ -80,7 +79,6 @@ const addVideo = asyncHandler(async (req, res) => {
         )
     )
 })
-
 const updateVideo = asyncHandler(async (req, res) => {
 
     const { title, description, duration, isPublished } = req.body
@@ -139,7 +137,6 @@ const updateVideo = asyncHandler(async (req, res) => {
         )
     )
 })
-
 const deleteVideo = asyncHandler(async (req, res) => {
 
     const id = req.params.id
@@ -165,7 +162,6 @@ const deleteVideo = asyncHandler(async (req, res) => {
     )
 
 })
-
 const getAllVideo = asyncHandler(async (req, res) => {
     const videos = await Video.find()
     return res.status(200).json(
@@ -177,7 +173,6 @@ const getAllVideo = asyncHandler(async (req, res) => {
     )
 
 })
-
 const getMyVideo = asyncHandler(async (req, res) => {
     const ownerId = req.user._id
 
@@ -200,7 +195,6 @@ const getMyVideo = asyncHandler(async (req, res) => {
     )
 
 })
-
 const getVideoDetail = asyncHandler(async (req, res) => {
 
     const id = req.params.id

@@ -10,7 +10,8 @@ import {
     updateUserAvatar,
     updateUserCoverImage,
     getUserChannelProfile,
-    getWatchHistory
+    getWatchHistory,
+    subscribeChannel
 } from "../controllers/user.controller.js";
 import { upload } from '../middlewares/multer.js'
 import { jwtVerify } from "../middlewares/auth.middleware.js";
@@ -65,6 +66,10 @@ router.route('/channel/:username').get(
 router.route('/watch-history').get(
     jwtVerify,
     getWatchHistory
+)
+router.route('/subscribe-channel/:id').post(
+    jwtVerify,
+    subscribeChannel
 )
 
 export default router

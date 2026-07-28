@@ -4,7 +4,8 @@ import User from '../models/users.model.js'
 import { fileUpload } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from 'jsonwebtoken'
-import mongoose, { Mongoose } from "mongoose";
+import { Subscription } from "../models/subscription.model.js";
+
 
 const generateAccessAndRefreshToken = async (userid) => {
     try {
@@ -480,6 +481,29 @@ const getWatchHistory = asyncHandler(async (req, res) => {
         )
     )
 })
+const subscribeChannel = asyncHandler(async (req, res) => {
+    const id = req.params.id
+
+    const subscription = await Subscription.create({
+        subscriber: req.user._id,
+        channel: id,
+    })
+    if (!subscription) {
+        throw new ApiError(
+            400,
+            "Failed to subscribe to the channel"
+        )
+    }
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            subscription,
+            "Subscribe to the Channel Sucessfully!!"
+
+        )
+    )
+
+})
 
 export {
     register,
@@ -492,5 +516,6 @@ export {
     updateUserAvatar,
     updateUserCoverImage,
     getUserChannelProfile,
-    getWatchHistory
+    getWatchHistory,
+    subscribeChannel
 }
