@@ -5,7 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const createComment = asyncHandler(async (req, res) => {
     const { content } = req.body
-    const videoId = req.body.videoId
+    const videoId = req.params.videoId
 
     const commentExist = await Comment.findOne({
         video: videoId,
@@ -95,3 +95,9 @@ const deleteComment = asyncHandler(async (req, res) => {
 
 
 })
+
+export {
+    createComment,
+    editComment,
+    deleteComment
+}
