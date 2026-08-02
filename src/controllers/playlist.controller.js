@@ -64,6 +64,15 @@ const deletePlayList = asyncHandler(async (req, res) => {
     )
 })
 
+//  getPlaylistByid
+
+//addVideoToPlaylist
+
+// removeVideoFromPlaylist
+
+// updatePlaylist
+
+
 export {
     getPlaylist,
     createPlaylist,
