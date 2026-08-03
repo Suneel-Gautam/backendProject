@@ -1,5 +1,16 @@
-import { asyncHandler } from "../utils/asyncHandler";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const healthCheck = asyncHandler(async (req, res) => {
-    // ToDO: build a healthCheck response that simply return the ok status as josn with message
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {},
+            "Server is running Sucessfully!!"
+        )
+    )
 })
+
+export {
+    healthCheck
+}

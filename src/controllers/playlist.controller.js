@@ -22,7 +22,7 @@ const createPlaylist = asyncHandler(async (req, res) => {
 
     const { name, description, videos } = req.body
 
-    if (!name || !description || !videos) {
+    if (!name || !description) {
         throw new ApiError(
             400,
             "All fields are required!!"
@@ -63,9 +63,27 @@ const deletePlayList = asyncHandler(async (req, res) => {
         )
     )
 })
-
 //  getPlaylistByid
+const getPlaylistByid = asyncHandler(async (req, res) => {
+    const id = req.params.id
 
+    const playlist = await PlayList.findById(id)
+
+    if (!playlist) {
+        throw new ApiError(
+            404,
+            "Playlist not found!!"
+        )
+    }
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            playlist,
+            "Playlist fetched sucessfully!!!"
+        )
+    )
+
+})
 //addVideoToPlaylist
 
 // removeVideoFromPlaylist
