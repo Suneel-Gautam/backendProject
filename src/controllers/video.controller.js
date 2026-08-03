@@ -226,8 +226,10 @@ const getVideoDetail = asyncHandler(async (req, res) => {
     )
 
 })
-
 // togglePublishStatus
+const togglePublishStatus = asyncHandler(async (req, res) => {
+
+})
 
 export {
     addVideo,
@@ -235,5 +237,6 @@ export {
     deleteVideo,
     getAllVideo,
     getVideoDetail,
-    getMyVideo
+    getMyVideo,
+    togglePublishStatus
 }

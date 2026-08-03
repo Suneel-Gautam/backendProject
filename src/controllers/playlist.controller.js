@@ -85,11 +85,17 @@ const getPlaylistByid = asyncHandler(async (req, res) => {
 
 })
 //addVideoToPlaylist
+const addVideoToPlaylist = asyncHandler(async (req, res) => {
 
+})
 // removeVideoFromPlaylist
+const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
 
+})
 // updatePlaylist
+const updatePlaylist = asyncHandler(async (req, res) => {
 
+})
 
 export {
     getPlaylist,
