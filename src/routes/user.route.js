@@ -13,6 +13,7 @@ import {
     getWatchHistory,
     subscribeChannel
 } from "../controllers/user.controller.js";
+import { healthCheck } from "../controllers/heathcheck.controller.js";
 import { upload } from '../middlewares/multer.js'
 import { jwtVerify } from "../middlewares/auth.middleware.js";
 
@@ -66,6 +67,9 @@ router.route('/channel/:username').get(
 router.route('/watch-history').get(
     jwtVerify,
     getWatchHistory
+)
+router.route('/heath-check').get(
+    healthCheck
 )
 
 export default router
