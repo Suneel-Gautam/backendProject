@@ -481,29 +481,6 @@ const getWatchHistory = asyncHandler(async (req, res) => {
         )
     )
 })
-const subscribeChannel = asyncHandler(async (req, res) => {
-    const id = req.params.id
-
-    const subscription = await Subscription.create({
-        subscriber: req.user._id,
-        channel: id,
-    })
-    if (!subscription) {
-        throw new ApiError(
-            400,
-            "Failed to subscribe to the channel"
-        )
-    }
-    return res.status(200).json(
-        new ApiResponse(
-            200,
-            subscription,
-            "Subscribe to the Channel Sucessfully!!"
-
-        )
-    )
-
-})
 
 export {
     register,
@@ -517,5 +494,4 @@ export {
     updateUserCoverImage,
     getUserChannelProfile,
     getWatchHistory,
-    subscribeChannel
 }

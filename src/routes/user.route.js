@@ -67,9 +67,5 @@ router.route('/watch-history').get(
     jwtVerify,
     getWatchHistory
 )
-router.route('/subscribe-channel/:id').post(
-    jwtVerify,
-    subscribeChannel
-)
 
 export default router
