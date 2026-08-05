@@ -173,28 +173,6 @@ const getAllVideo = asyncHandler(async (req, res) => {
     )
 
 })
-const getMyVideo = asyncHandler(async (req, res) => {
-    const ownerId = req.user._id
-
-    if (!ownerId) {
-        throw new ApiError(
-            404,
-            "User not Found"
-        )
-    }
-
-    const videos = await Video.find({
-        owner: ownerId
-    })
-    return res.status(200).json(
-        new ApiResponse(
-            200,
-            videos,
-            "My Video fetched Successfully"
-        )
-    )
-
-})
 const getVideoDetail = asyncHandler(async (req, res) => {
 
     const id = req.params.id
@@ -250,7 +228,6 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
         )
     )
 
-
 })
 
 export {
@@ -259,6 +236,5 @@ export {
     deleteVideo,
     getAllVideo,
     getVideoDetail,
-    getMyVideo,
     togglePublishStatus
 }

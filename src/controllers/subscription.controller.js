@@ -47,7 +47,6 @@ const toggleSubscription = asyncHandler(async (req, res) => {
     )
 
 })
-
 // getUserChannelSubscribers
 const getUserChannelSubscribers = asyncHandler(async (req, res) => {
 
@@ -67,10 +66,20 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
         },
         {
             $addFields: {
-                $subscriber : "$subscriber"
+                subscriber: {
+                    $first: "$subscriber"
+                }
+            }
+        },
+        {
+            $project: {
+                "subscriber._id": 1,
+                "subscriber.username": 1,
+                "subscriber.avatar": 1,
+                "subscriber.fullName": 1
             }
         }
-       
+
     ])
     return res.status(200).json(
         new ApiResponse(
@@ -83,9 +92,39 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
 // getSubscribedChannels
 const getSubscribedChannels = asyncHandler(async (req, res) => {
 
-    const subscription = await Subscription.find({
-        subscriber: req.user._id
-    })
+    const subscription = await Subscription.aggregate([
+        {
+            $match: {
+                subscriber: new Mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "channel",
+                foreignField: "_id",
+                as: "channel"
+            }
+        },
+        {
+            $addFields: {
+                channel: {
+                    $first: "$channel"
+                }
+            }
+        },
+        {
+            $project: {
+                "channel._id": 1,
+                "channel.username": 1,
+                "subscriber.avatar": 1,
+                "subscriber.fullName": 1
+            }
+        }
+
+    ])
+
+
     return res.status(200).json(
         new ApiResponse(
             200,

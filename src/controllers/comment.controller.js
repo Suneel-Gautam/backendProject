@@ -41,7 +41,6 @@ const createComment = asyncHandler(async (req, res) => {
         )
     )
 })
-
 const editComment = asyncHandler(async (req, res) => {
     const commentId = req.params.commentId
 
@@ -72,7 +71,6 @@ const editComment = asyncHandler(async (req, res) => {
 
 
 })
-
 const deleteComment = asyncHandler(async (req, res) => {
     const commentId = req.params.commentId
 
