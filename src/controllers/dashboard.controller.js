@@ -9,11 +9,12 @@ import User from "../models/users.model.js";
 
 const getChannelStats = asyncHandler(async (req, res) => {
 
-    // TODO : get the channel stats like total subscribers, total videos,
-    // total likes etc
-    const subscription = await User.aggregate([
+
+    const userStats = await User.aggregate([
         {
-            $match: new Mongoose.Types.ObjectId(req.user._id)
+            $match: {
+                _id: new Mongoose.Types.ObjectId(req.user._id)
+            }
         },
         {
             $lookup: {
@@ -22,6 +23,8 @@ const getChannelStats = asyncHandler(async (req, res) => {
                 foreignField: "channel",
                 as: "subscriber"
             },
+        },
+        {
             $lookup: {
                 from: "videos",
                 localField: "_id",
@@ -30,7 +33,22 @@ const getChannelStats = asyncHandler(async (req, res) => {
                 pipeline: [
                     {
                         $lookup: {
-                            from: "likes"
+                            from: "likes",
+                            localField: "_id",
+                            foreignField: "video",
+                            as: "likeCount"
+                        }
+                    },
+                    {
+                        $addFields: {
+                            likeCount: {
+                                $size: "$likeCount"
+                            }
+                        }
+                    },
+                    {
+                        $project: {
+                            likeCount: 1
                         }
                     }
 
@@ -44,19 +62,28 @@ const getChannelStats = asyncHandler(async (req, res) => {
                 },
                 videosCount: {
                     $size: "$video"
+                },
+                totalLikeCount: {
+                    $sum: "$likeCount.likeCount"
                 }
             }
         },
         {
             $project: {
                 subscriberCount: 1,
-                videosCount: 1
+                videosCount: 1,
+                totalLikeCount: 1
             }
-
         }
-
     ])
 
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            userStats,
+            "User stats fetched sucessfully!!"
+        )
+    )
 
 })
 
@@ -73,3 +100,8 @@ const getChanelVideos = asyncHandler(async (req, res) => {
         )
     )
 })
+
+export {
+    getChannelStats,
+    getChanelVideos
+}
